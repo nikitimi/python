@@ -16,26 +16,34 @@ class Timer:
 
 def process_with_ocr(filepath:str):
     global is_finish
-    if not path.isfile(filepath):
-        return print(f"{filepath} is not a page")
-    
+    global t
+    result_json = './result.json'
     pages:list[dict[str,str]] = []
     reader = PdfReader(filepath)
     MAX_PAGES = len(reader.pages)
 
-    for index in range((MAX_PAGES+1)):
-        page = reader.pages[index]
-        pages.append({"page": page.extract_text()})
-        percentage = ((index)/MAX_PAGES)*100
-        animate_percentage(percentage)
+    if not path.isfile(filepath):
+        return print(f"{filepath} is not a page")
+    if path.isfile(result_json):
+        return print(f"Delete {result_json} first before executing this script!")
     
-    result_json = './result.json'
-    if not path.isfile(result_json):
-        f = open(result_json, 'w')
-        content = f"\"pages\":{str(pages)}"
-        f.write(content)
-        f.close()
+    Thread(target=t.timer, daemon=True).start()
+    for index in range(MAX_PAGES+1):
+        percentage = ((index)/MAX_PAGES)*100
+        try:
+            page = reader.pages[index]
+            pages.append({"page": page.extract_text()})
+            animate_percentage(percentage)
+        except IndexError:
+            animate_percentage(percentage)
+            pass
+    
+    f = open(result_json, 'w')
+    content = f"\"pages\":{str(pages)}"
+    f.write(content)
+    f.close()
     is_finish = True
+    print(f"Conversion finished with {f'{str(sec_to_min)} minute(s)' if sec_to_min >= 1 else f'{str(t.seconds)} second(s)'}!")
 
 def animate_percentage(p:int):
     system('clear')
@@ -52,12 +60,10 @@ def animate_percentage(p:int):
     sleep(.5)
     
 if __name__ == "__main__":
-    filepath = "/mnt/c/Users/Admin/Desktop/ojt/MTAP/B. Reference Books/2. Microbiology (Bacte & MycoViro)/Other books/Copy of Burton’s Microbiology for the Health Sciences 11th Ed.pdf"
+    filepath = "/mnt/c/Users/Admin/Desktop/ojt/MTAP/B. Reference Books/2. Microbiology (Bacte & MycoViro)/Other books/8.5x13_Long_MOA.pdf"
     is_finish = False
     t = Timer()
-    Thread(target=t.timer, daemon=True).start()
 
     sec_to_min = t.seconds/60
 
     process_with_ocr(filepath)
-    print(f"Conversion finished with {f'{str(sec_to_min)} minute(s)' if sec_to_min >= 1 else f'{str(t.seconds)} second(s)'}!")
