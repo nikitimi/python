@@ -1,15 +1,14 @@
 from PIL import Image
 import os
 import pathlib
-import sys
 
 directories = []
 is_running = True
 key = os.curdir
 
-# Change the condition to your use-case of target directories,
-# In this case, this is targeting folders with '_' prefix.
 def initialize_target_directories(path:str):
+    """ Change the condition to your use-case of target directories,\n
+    In this case, this is targeting folders with '_' prefix."""
     current_directory = pathlib.Path(path).absolute()
     for dir in os.listdir(current_directory):
         if dir.startswith('_') and os.path.isdir(dir):
@@ -44,13 +43,13 @@ def iterate_directory_files(path:str):
         index += 1
         
         
+# Use Case
+# if __name__ == '__main__':
+#     initialize_target_directories(os.curdir)
 
-if __name__ == '__main__':
-    initialize_target_directories(os.curdir)
-
-    for target_directory in directories:
-        print(target_directory)
-        iterate_directory_files(target_directory)
+#     for target_directory in directories:
+#         print(target_directory)
+#         iterate_directory_files(target_directory)
         
         ### CHECKING.
         # while is_running:

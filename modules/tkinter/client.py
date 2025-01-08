@@ -6,12 +6,11 @@ import logging
 import traceback
 import time
 import playsound
-import threading
 
 from tkinter import ttk
 from os import path
 from multiprocessing import Process
-from getIp import getIPv4Addr
+from modules.getIp import getIPv4Addr
 
 HOST = '10.0.103.13'
 PORT = 65432
@@ -215,17 +214,4 @@ class Client(ctk.CTk):
 
 def on_frame_destroy(event):
     print(f"destroyed {event}")
-
-def main():
-    global is_terminated
-    client = Client()
-    client_thread = threading.Thread(target=client.connect_to_server)
-    client_thread.start()
-    client.deiconify()
-    # client.bind("<Destroy>", on_frame_destroy)
-    client.mainloop()
-    is_terminated = True
-
-
-if __name__ == "__main__":
-    main()  
+    

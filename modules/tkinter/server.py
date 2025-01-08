@@ -1,6 +1,5 @@
 import socket
 import threading
-from multiprocessing import Process
 
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 12345
@@ -48,11 +47,3 @@ class Server:
             client_socket.join()
             self.clients.remove(client_socket)
             print("Client disconnected")
-
-def main():
-    server = Server()
-    server_thread = Process(target=server.start)
-    server_thread.start()
-
-if __name__ == "__main__":
-    main()
