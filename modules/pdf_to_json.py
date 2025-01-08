@@ -25,7 +25,7 @@ class PDF_to_JSON:
         if path.isfile(result_json):
             return print(f"Delete {result_json} first before executing this script!")
         
-        Thread(target=t.timer, daemon=True).start()
+        Thread(target=self.t.timer, daemon=True).start()
         for index in range(MAX_PAGES+1):
             percentage = ((index)/MAX_PAGES)*100
             try:

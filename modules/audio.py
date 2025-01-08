@@ -20,7 +20,7 @@ class Audio:
 
         self.stream.start_stream()
 
-        while self.stream.is_active() or paused==True:
+        while self.stream.is_active() or self.paused==True:
             with keyboard.Listener(on_press=self.on_press) as listener:
                 listener.join()
             time.sleep(0.1)
